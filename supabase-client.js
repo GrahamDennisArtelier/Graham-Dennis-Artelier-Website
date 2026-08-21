@@ -77,6 +77,23 @@
       const {data,error}=await client.from('artworks').select('*,collection:collections(name),artwork_images(*)').order('created_at',{ascending:false});
       if(error)throw error;return data;
     },
+    async adminCollections() {
+      if (!client) throw new Error('Supabase is not configured.');
+      const {data,error}=await client.from('collections').select('*,artworks(id)').order('sort_order').order('name');
+      if(error)throw error;
+      return data.map(row=>({...row,artwork_count:row.artworks?.length||0}));
+    },
+    async createCollection(values) {
+      if (!client) throw new Error('Supabase is not configured.');
+      const base=values.name.trim().toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'collection';
+      const {data,error}=await client.from('collections').insert({name:values.name.trim(),description:values.description?.trim()||null,slug:`${base}-${Date.now().toString(36)}`}).select().single();
+      if(error)throw error;return data;
+    },
+    async deleteCollection(id) {
+      if (!client) throw new Error('Supabase is not configured.');
+      const {error}=await client.from('collections').delete().eq('id',id);
+      if(error)throw error;
+    },
     async updateArtwork(id, values) { const {error}=await client.from('artworks').update(values).eq('id',id);if(error)throw error; },
     async deleteArtwork(id) { const {error}=await client.from('artworks').delete().eq('id',id);if(error)throw error; },
     async duplicateArtwork(id) {
