@@ -49,6 +49,18 @@
         form.reset();note.textContent='Thank you — you are on the studio list.';
       }catch(error){note.textContent=error.message}
     });
+    (async()=>{
+      if(!window.GDBackend?.configured)return;
+      try{
+        const content=await window.GDBackend.homepage();
+        if(!content?.hero_image_url)return;
+        const safeUrl=content.hero_image_url.replace(/'/g,'%27');
+        document.querySelector('.image').style.backgroundImage=`url('${safeUrl}')`;
+        if(matchMedia('(max-width:780px)').matches){
+          document.querySelector('.content').style.backgroundImage=`linear-gradient(90deg,#080808e8,#08080888),url('${safeUrl}')`;
+        }
+      }catch(error){console.error('Homepage image could not be loaded:',error)}
+    })();
   </script>
 </body>
 </html>

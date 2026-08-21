@@ -89,6 +89,15 @@
     async adminEnquiries() { const {data,error}=await client.from('enquiries').select('*').order('created_at',{ascending:false});if(error)throw error;return data; },
     async updateEnquiry(id,status) { const {error}=await client.from('enquiries').update({status}).eq('id',id);if(error)throw error; },
     async homepage() { const {data,error}=await client.from('homepage_content').select('*').eq('id',1).maybeSingle();if(error)throw error;return data; },
-    async updateHomepage(values) { const {error}=await client.from('homepage_content').upsert({id:1,...values,updated_at:new Date().toISOString()});if(error)throw error; }
+    async updateHomepage(values) { const {error}=await client.from('homepage_content').upsert({id:1,...values,updated_at:new Date().toISOString()});if(error)throw error; },
+    async uploadHomepageImage(file) {
+      if (!file || !file.type.startsWith('image/')) throw new Error('Please choose an image file.');
+      if (file.size > 12 * 1024 * 1024) throw new Error('The image must be smaller than 12 MB.');
+      const extension=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');
+      const path=`site-content/homepage-${crypto.randomUUID()}.${extension}`;
+      const {error}=await client.storage.from('artworks').upload(path,file,{cacheControl:'31536000',contentType:file.type});
+      if(error)throw error;
+      return client.storage.from('artworks').getPublicUrl(path).data.publicUrl;
+    }
   };
 })();
