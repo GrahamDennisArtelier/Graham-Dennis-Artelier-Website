@@ -1,0 +1,11 @@
+node_modules/
+supabase/
+.git/
+.env
+.gitignore
+.assetsignore
+package.json
+package-lock.json
+STRIPE_SETUP.md
+supabase-schema.sql
+wrangler.jsonc

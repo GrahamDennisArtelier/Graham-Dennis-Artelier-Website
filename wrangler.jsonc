@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "graham-dennis-artelier-website",
+  "compatibility_date": "2026-08-20",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": ".",
+    "exclude": [
+      "node_modules/**",
+      "supabase/**",
+      ".git/**",
+      ".env",
+      ".gitignore",
+      ".assetsignore",
+      "package.json",
+      "package-lock.json",
+      "STRIPE_SETUP.md",
+      "supabase-schema.sql",
+      "wrangler.jsonc"
+    ]
+  }
+}
