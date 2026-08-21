@@ -49,6 +49,19 @@
         if (imageRow.error) throw imageRow.error;
       }
       return data;
+    },
+    async checkout(items) {
+      if (!client) throw new Error('Supabase is not configured.');
+      const artworkIds = items.map(item => item.id).filter(Boolean);
+      if (artworkIds.length !== items.length) throw new Error('Please refresh the collection before checking out.');
+      const response = await fetch(`${cfg.url}/functions/v1/create-checkout-session`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: cfg.publishableKey },
+        body: JSON.stringify({ artworkIds })
+      });
+      const result = await response.json();
+      if (!response.ok || !result.url) throw new Error(result.error || 'Checkout could not be started.');
+      return result.url;
     }
   };
 })();
