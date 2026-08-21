@@ -38,7 +38,7 @@ create table if not exists public.orders (
 );
 create table if not exists public.homepage_content (
   id integer primary key default 1 check (id = 1), headline text not null default 'The Art of Graham Dennis',
-  hero_image_url text, artist_introduction text, updated_at timestamptz not null default now()
+  hero_image_url text, artist_introduction text, site_live boolean not null default false, updated_at timestamptz not null default now()
 );
 create table if not exists public.audit_log (
   id bigint generated always as identity primary key, actor_id uuid references auth.users(id),

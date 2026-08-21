@@ -13,7 +13,7 @@
   <link rel="canonical" href="https://www.grahamdennisartelier.co.uk/">
   <style>
     *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#101010;color:#f7f5f0;font-family:Inter,"Helvetica Neue",Arial,sans-serif}body{min-height:100svh;overflow-x:hidden}.page{min-height:100svh;display:grid;grid-template-columns:minmax(320px,42%) 1fr}.content{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:space-between;padding:42px clamp(28px,5vw,80px) 36px;background:#101010}.brand{font-size:12px;line-height:1.4;letter-spacing:.2em;text-transform:uppercase}.brand span{color:#8c8a85}.main{max-width:610px;padding:80px 0}.eyebrow{margin:0 0 28px;color:#96938d;font-size:10px;letter-spacing:.24em;text-transform:uppercase}.main h1{margin:0;font-size:clamp(58px,7.5vw,126px);font-weight:200;line-height:.84;letter-spacing:-.065em}.intro{max-width:480px;margin:38px 0 45px;color:#aaa7a0;font-size:15px;font-weight:300;line-height:1.8}.notify{display:flex;align-items:end;max-width:480px}.notify label{flex:1;color:#8f8c86;font-size:9px;letter-spacing:.18em;text-transform:uppercase}.notify input{display:block;width:100%;margin-top:9px;padding:12px 0;color:#fff;background:transparent;border:0;border-bottom:1px solid #5c5a56;border-radius:0;outline:0;font-size:14px}.notify input:focus{border-color:#fff}.notify button{margin-left:20px;padding:13px 0;color:#fff;background:none;border:0;border-bottom:1px solid #fff;font-size:9px;letter-spacing:.18em;text-transform:uppercase}.note{min-height:18px;margin:14px 0 0;color:#8f8c86;font-size:11px}.foot{display:flex;justify-content:space-between;gap:20px;color:#77746e;font-size:10px;letter-spacing:.12em;text-transform:uppercase}.foot a{color:inherit;text-decoration:none}.image{position:relative;min-height:100svh;background:url('assets/hero.png') center/cover no-repeat}.image:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#10101030,transparent 35%),linear-gradient(0deg,#0005,transparent 40%)}.edition{position:absolute;z-index:1;right:30px;bottom:30px;color:#ddd;font-size:9px;letter-spacing:.18em;text-transform:uppercase;writing-mode:vertical-rl}.mark{position:fixed;z-index:3;right:18px;top:18px;width:7px;height:7px;border-radius:50%;background:#f7f5f0;box-shadow:0 0 0 6px #ffffff12}.reveal{animation:arrive 1s cubic-bezier(.2,.7,.2,1) both}.main{animation-delay:.12s}@keyframes arrive{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}@media(max-width:780px){.page{display:block}.content{min-height:100svh;padding:28px;justify-content:space-between;background:linear-gradient(90deg,#080808e8,#08080888),url('assets/hero.png') center/cover}.image{display:none}.main{padding:60px 0}.main h1{font-size:clamp(58px,20vw,92px)}.notify{display:block}.notify button{margin:22px 0 0}.foot{line-height:1.6}}
-    .legal-icon{display:inline-flex;color:inherit;opacity:.55;transition:opacity .25s}.legal-icon:hover,.legal-icon:focus{opacity:1}.legal-icon svg{width:22px;height:22px}
+    .legal-icon{display:inline-flex;color:inherit;opacity:.55;transition:opacity .25s}.legal-icon:hover,.legal-icon:focus{opacity:1}.legal-icon svg{width:22px;height:22px}.admin-entry{position:fixed;z-index:5;right:18px;bottom:18px;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;color:#f7f5f0;background:#181818;text-decoration:none;font-size:18px;opacity:.18;transition:opacity .25s}.admin-entry:hover,.admin-entry:focus{opacity:1}
   </style>
 </head>
 <body>
@@ -35,6 +35,7 @@
     <div class="image" role="img" aria-label="Graham Dennis working in his contemporary painting studio"><span class="edition">Studio / Twenty twenty-six</span></div>
   </main>
   <span class="mark" aria-hidden="true"></span>
+  <a class="admin-entry" href="gallery.html?admin=1" aria-label="Studio administration">&#9881;</a>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <script src="supabase-client.js"></script>
@@ -54,6 +55,7 @@
       if(!window.GDBackend?.configured)return;
       try{
         const content=await window.GDBackend.homepage();
+        if(content?.site_live){location.replace('gallery.html');return}
         if(!content?.hero_image_url)return;
         const safeUrl=content.hero_image_url.replace(/'/g,'%27');
         document.querySelector('.image').style.backgroundImage=`url('${safeUrl}')`;
