@@ -62,6 +62,33 @@
       const result = await response.json();
       if (!response.ok || !result.url) throw new Error(result.error || 'Checkout could not be started.');
       return result.url;
-    }
+    },
+    async adminOverview() {
+      if (!client) throw new Error('Supabase is not configured.');
+      const [artworks, orders, enquiries] = await Promise.all([
+        client.from('artworks').select('id,status', { count: 'exact' }),
+        client.from('orders').select('id,status,amount_total,customer_email,created_at').order('created_at',{ascending:false}).limit(5),
+        client.from('enquiries').select('id,status,name,email,inquiry_type,created_at').order('created_at',{ascending:false}).limit(5)
+      ]);
+      const error=artworks.error||orders.error||enquiries.error;if(error)throw error;
+      return { artworks:artworks.data, orders:orders.data, enquiries:enquiries.data };
+    },
+    async adminArtworks() {
+      const {data,error}=await client.from('artworks').select('*,collection:collections(name),artwork_images(*)').order('created_at',{ascending:false});
+      if(error)throw error;return data;
+    },
+    async updateArtwork(id, values) { const {error}=await client.from('artworks').update(values).eq('id',id);if(error)throw error; },
+    async deleteArtwork(id) { const {error}=await client.from('artworks').delete().eq('id',id);if(error)throw error; },
+    async duplicateArtwork(id) {
+      const {data,error}=await client.from('artworks').select('*').eq('id',id).single();if(error)throw error;
+      delete data.id;delete data.created_at;delete data.updated_at;data.title=`${data.title} (Copy)`;data.slug=null;data.status='draft';data.featured=false;
+      const inserted=await client.from('artworks').insert(data);if(inserted.error)throw inserted.error;
+    },
+    async adminOrders() { const {data,error}=await client.from('orders').select('*').order('created_at',{ascending:false});if(error)throw error;return data; },
+    async updateOrder(id,status) { const {error}=await client.from('orders').update({status}).eq('id',id);if(error)throw error; },
+    async adminEnquiries() { const {data,error}=await client.from('enquiries').select('*').order('created_at',{ascending:false});if(error)throw error;return data; },
+    async updateEnquiry(id,status) { const {error}=await client.from('enquiries').update({status}).eq('id',id);if(error)throw error; },
+    async homepage() { const {data,error}=await client.from('homepage_content').select('*').eq('id',1).maybeSingle();if(error)throw error;return data; },
+    async updateHomepage(values) { const {error}=await client.from('homepage_content').upsert({id:1,...values,updated_at:new Date().toISOString()});if(error)throw error; }
   };
 })();
