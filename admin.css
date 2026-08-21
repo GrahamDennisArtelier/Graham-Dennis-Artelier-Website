@@ -18,3 +18,23 @@
 .admin-form{max-width:720px}.admin-form label{display:block;margin:30px 0;color:#555;font-size:10px;letter-spacing:.12em;text-transform:uppercase}.admin-form input,.admin-form textarea{display:block;width:100%;padding:12px 0;border:0;border-bottom:1px solid #aaa;background:#fff;font-size:15px;text-transform:none;letter-spacing:0}.admin-form textarea{min-height:150px;resize:vertical}.admin-form .form-note{color:#365f31}
 @media(max-width:1000px){.admin-table article{grid-template-columns:1fr 100px}.admin-table article>.status,.admin-table article>label,.admin-table .row-actions{grid-column:1/-1}.admin-grid{grid-template-columns:1fr}}
 @media(max-width:800px){.admin-modal{padding:0}.admin-modal .modal-shell{max-height:100vh}.admin aside{display:flex;overflow-x:auto;padding:15px}.admin aside .wordmark,.admin aside .admin-signout{display:none}.admin aside button{width:auto;white-space:nowrap;border-left:0;border-bottom:2px solid transparent}.admin aside button.active{border-bottom-color:#111}.enquiry-list header{display:block}.enquiry-list header span{display:block;margin-top:12px}}
+
+/* Public cinematic contact form: make entered text and the caret visible. */
+.cinematic .contact-form input,
+.cinematic .contact-form select,
+.cinematic .contact-form textarea{
+  color:#f7f5f0;
+  caret-color:#f7f5f0;
+  border-bottom-color:#68655f;
+  -webkit-text-fill-color:#f7f5f0;
+}
+.cinematic .contact-form input:focus,
+.cinematic .contact-form select:focus,
+.cinematic .contact-form textarea:focus{border-bottom-color:#f7f5f0}
+.cinematic .contact-form input::placeholder,
+.cinematic .contact-form textarea::placeholder{color:#918e88;opacity:1}
+.cinematic .contact-form select option{color:#111;background:#fff}
+.cinematic .contact-form input:-webkit-autofill{
+  box-shadow:0 0 0 1000px #101010 inset;
+  -webkit-text-fill-color:#f7f5f0;
+}
