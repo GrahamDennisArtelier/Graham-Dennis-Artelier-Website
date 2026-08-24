@@ -1,0 +1,14 @@
+# Report security issues to this email
+Contact: mailto:scott@shwdigitalservices.site
+
+# Our public key to encrypt sensitive vulnerability reports
+Encryption: https://grahamdennisartelier.co.uk/.well-known/pgp-key.txt
+
+# The rules of our security program and what is in scope
+Policy: https://grahamdennisartelier.co.uk/security-policy
+
+# A page thanking researchers who have helped us
+Acknowledgments: https://grahamdennisartelier.co.uk/security-acknowledgments
+
+# This file expires and must be reviewed by:
+Expires: 2027-08-24T12:00:00Z
