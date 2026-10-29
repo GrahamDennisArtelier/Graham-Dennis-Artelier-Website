@@ -8,7 +8,7 @@
   const cleanArtwork = row => ({
     id: row.id, t: row.title, m: row.medium, d: row.dimensions,
     p: Number(row.price), y: String(row.year_created || ''),
-    c: row.collection?.name || row.collection_name || 'Uncategorised',
+    collection_id: row.collection_id, c: row.collection?.name || row.collection_name || row.category || 'Uncategorised',
     description: row.description, availability: row.availability,
     image: row.artwork_images?.find(x => x.is_hero)?.public_url || row.artwork_images?.[0]?.public_url || ''
   });
@@ -25,9 +25,15 @@
     async signOut() { if (client) await client.auth.signOut(); },
     async artworks() {
       if (!client) return null;
-      const { data, error } = await client.from('artworks').select('*,collection:collections(name),artwork_images(*)').eq('status','published').order('sort_order');
+      const { data, error } = await client.from('artworks').select('*,collection:collections(id,name),artwork_images(*)').eq('status','published').order('sort_order');
       if (error) throw error;
       return data.map(cleanArtwork);
+    },
+    async collections() {
+      if (!client) return null;
+      const { data, error } = await client.from('collections').select('id,name').order('sort_order').order('name');
+      if (error) throw error;
+      return data;
     },
     async enquiry(payload) {
       if (!client) return null;
@@ -88,6 +94,14 @@
       const base=values.name.trim().toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'collection';
       const {data,error}=await client.from('collections').insert({name:values.name.trim(),description:values.description?.trim()||null,slug:`${base}-${Date.now().toString(36)}`}).select().single();
       if(error)throw error;return data;
+    },
+    async updateCollection(id, values) {
+      if (!client) throw new Error('Supabase is not configured.');
+      const {error}=await client.from('collections').update({
+        name:values.name.trim(),
+        description:values.description?.trim()||null
+      }).eq('id',id);
+      if(error)throw error;
     },
     async deleteCollection(id) {
       if (!client) throw new Error('Supabase is not configured.');
