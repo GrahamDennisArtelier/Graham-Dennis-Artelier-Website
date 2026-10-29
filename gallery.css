@@ -9,3 +9,4 @@ body.graphic .site-head{border-bottom:1px solid #111}.graphic .brand{font-weight
 #home>.section{display:none}body.home-view .footer{display:none}#home .hero-copy>.eyebrow,#home .hero-copy>.lede{display:none}.art-image.remote{background-size:cover;background-position:center}.art-image.remote:after{display:none}
 .product-art.has-image{background:#f4f2ee}.product-art.has-image:after{display:none}.product-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
 .legal-icon{display:inline-flex;align-items:center;justify-content:center;color:inherit;text-decoration:none;opacity:.55;transition:opacity .25s}.legal-icon:hover,.legal-icon:focus{opacity:1}.scales{width:23px;height:23px;display:block}
+#gallery .art-image{aspect-ratio:1}
